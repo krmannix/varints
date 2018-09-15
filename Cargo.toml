@@ -1,0 +1,6 @@
+[package]
+name = "varint-rs"
+version = "0.1.0"
+authors = ["Kevin Mannix <kmannix@bu.edu>"]
+
+[dependencies]

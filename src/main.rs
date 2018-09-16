@@ -1,5 +1,6 @@
 use std::env; 
 use std::process;
+use std::slice;
 
 fn main() {
   let args: Vec<String> = env::args().collect();
@@ -8,9 +9,34 @@ fn main() {
     process::exit(1)
   });
 
-  println!("Here")
+  println!("Integer: {:?}", to_bitv(config.integ));
+  
+  println!("Chunks: {:?}", to_chunks(&to_bitv(config.integ)))
+}
+
+fn run(config: Config) {
 
 }
+
+fn to_chunks<'a>(bits: &'a Vec<bool>) -> &[bool] {
+  return bits.chunks(7).next().unwrap();
+}
+
+
+fn to_bitv(int: u32) -> Vec<bool> {
+  fn to_bitv_acc(mut acc: Vec<bool>, int: u32) -> Vec<bool> {
+    if int == 0 {
+      acc.reverse();
+      acc
+    } else {
+      acc.push(int % 2 == 1);
+      to_bitv_acc(acc, int / 2)
+    }
+  }
+
+  to_bitv_acc(Vec::with_capacity(32), int)
+}
+
 
 struct Config {
   integ: u32,

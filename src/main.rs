@@ -14,7 +14,6 @@ fn main() {
 }
 
 fn run(config: Config) {
-
 }
 
 fn to_chunks<'a>(bits: &'a Vec<bool>) -> Vec<Vec<bool>> {
@@ -26,7 +25,8 @@ fn to_chunks<'a>(bits: &'a Vec<bool>) -> Vec<Vec<bool>> {
         if x < chunk.len() { chunk[x] } else { false }
       )
     }
-    vec.push(i == chunks.len() - 1); // set MSB to indicate whether more bytes are included
+    vec.push(i != chunks.len() - 1); // set MSB to indicate whether more bytes are included
+    vec.reverse();
     return vec;
   }).collect();
 }

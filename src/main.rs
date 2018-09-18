@@ -8,26 +8,27 @@ fn main() {
     process::exit(1)
   });
 
-  println!("Integer: {:?}", to_bitv_reversed(config.integ));
-  
-  println!("Chunks: {:?}", to_chunks(&to_bitv_reversed(config.integ)))
+  run(config);
 }
 
 fn run(config: Config) {
+  let bitv_reversed = to_bitv_reversed(config.integ);
+  let bytev = to_bytev(&bitv_reversed);
+  println!("Bytes: {:?}", bytev);
 }
 
-fn to_chunks<'a>(bits: &'a Vec<bool>) -> Vec<Vec<bool>> {
-  let chunks = bits.chunks(7).enumerate();
-  return chunks.clone().map(|(i, chunk)| {
-    let mut vec = Vec::with_capacity(8);
+fn to_bytev<'a>(bits: &'a Vec<bool>) -> Vec<Vec<bool>> {
+  let last_chunk_index = bits.len() / 7;
+  return bits.chunks(7).enumerate().map(|(i, chunk)| {
+    let mut byte = Vec::with_capacity(8);
     for x in 0..7 {
-      vec.push(
+      byte.push(
         if x < chunk.len() { chunk[x] } else { false }
       )
     }
-    vec.push(i != chunks.len() - 1); // set MSB to indicate whether more bytes are included
-    vec.reverse();
-    return vec;
+    byte.push(i != last_chunk_index); // set MSB to indicate whether more bytes are included
+    byte.reverse();
+    return byte;
   }).collect();
 }
 

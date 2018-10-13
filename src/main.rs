@@ -1,5 +1,6 @@
 use std::env; 
 use std::process;
+use std::char;
 
 fn main() {
   let args: Vec<String> = env::args().collect();
@@ -14,7 +15,36 @@ fn main() {
 fn run(config: Config) {
   let bitv_reversed = to_bitv_reversed(config.integ);
   let bytev = to_bytev(&bitv_reversed);
-  println!("Bytes: {:?}", bytev);
+  let hexv: Vec<char> = to_hexv(&bytev);
+  let s: String = hexv.into_iter().collect();
+  println!("{}", s);
+}
+
+fn to_hexv<'a>(bytes: &'a Vec<Vec<bool>>) -> Vec<char> {
+  return bytes.iter().flat_map(|bitv| {
+    return bitv.chunks(4).map(|bits| {
+      return nibble_to_hex(bits.to_vec());
+    });
+  }).collect();
+}
+
+fn nibble_to_hex(nibble: Vec<bool>) -> char {
+  let int_nibble: Vec<u32> = nibble.iter().map(|&bit| if bit { 1 } else { 0 }).collect();
+  let num = int_nibble[0] * 1 + int_nibble[1] * 2 + int_nibble[2] * 4 + int_nibble[3] * 8;
+
+  if num < 10 {
+    return char::from_digit(num, 10).unwrap(); 
+  } else {
+    return match num {
+      10 => 'A',
+      11 => 'B',
+      12 => 'C',
+      13 => 'D',
+      14 => 'E',
+      15 => 'F',
+      _  => 'X',
+    }
+  }
 }
 
 fn to_bytev<'a>(bits: &'a Vec<bool>) -> Vec<Vec<bool>> {

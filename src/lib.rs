@@ -61,3 +61,18 @@ fn to_bitv_reversed(int: u32) -> Vec<bool> {
 
   to_bitv_reversed_acc(Vec::with_capacity(32), int)
 }
+
+#[cfg(test)]
+mod tests {
+  use super::to_hex;
+
+  #[test]
+  fn one() {
+    assert_eq!(to_hex(1), &['0','1'])
+  }
+
+  #[test]
+  fn five_digit() {
+    assert_eq!(to_hex(89657), &['B','9','B','C','0','5'])
+  }
+}

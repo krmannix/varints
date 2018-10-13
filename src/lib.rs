@@ -16,7 +16,7 @@ fn to_hexv<'a>(bytes: &'a Vec<Vec<bool>>) -> Vec<char> {
 
 fn nibble_to_hex(nibble: Vec<bool>) -> char {
   let int_nibble: Vec<u32> = nibble.iter().map(|&bit| if bit { 1 } else { 0 }).collect();
-  let num = int_nibble[0] * 1 + int_nibble[1] * 2 + int_nibble[2] * 4 + int_nibble[3] * 8;
+  let num = int_nibble[0] * 8 + int_nibble[1] * 4 + int_nibble[2] * 2 + int_nibble[3] * 1;
 
   if num < 10 {
     return char::from_digit(num, 10).unwrap(); 

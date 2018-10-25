@@ -74,4 +74,14 @@ mod tests {
   fn five_digit() {
     assert_eq!(to_hex(89657), &['B','9','B','C','0','5'])
   }
+
+  #[test]
+  fn max() {
+    assert_eq!(to_hex(4294967295), &['F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', '0', 'F'])
+  }
+
+  #[test]
+  fn min() {
+    assert_eq!(to_hex(0), &['0', '0'])
+  }
 }

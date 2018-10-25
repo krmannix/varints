@@ -22,11 +22,13 @@ struct Config {
 
 impl Config {
   fn new(args: &[String]) -> Result<Config, &'static str> {
-    if args.len() != 2 { return Err("Please enter an integer as an argument"); }
+    if args.len() != 2 { return Err("Please enter a non-negative integer as an argument"); }
 
     match args[1].clone().trim().parse::<u32>() {
       Ok(int) => Ok(Config { int } ),
-      Err(_) => Err("Could not parse integer")
+      Err(_) => Err(
+        "Could not parse integer.\nTry entering a non-negative integer less than 4,294,967,296"
+      )
     }
   }
 }

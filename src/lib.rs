@@ -42,16 +42,23 @@ fn bits_reversed_to_bytes(bits_reversed: &Vec<bool>) -> Vec<Vec<bool>> {
 
 
 fn int_to_bits_reversed(int: u32) -> Vec<bool> {
-  fn int_to_bits_reversed_acc(mut acc: Vec<bool>, int: u32) -> Vec<bool> {
-    if int == 0 {
+  fn int_to_bits_reversed_acc(mut acc: Vec<bool>, xint: u32) -> Vec<bool> {
+    if xint == 0 {
       acc
     } else {
-      acc.push(int % 2 == 1);
-      int_to_bits_reversed_acc(acc, int / 2)
+      acc.push(xint % 2 == 1);
+      int_to_bits_reversed_acc(acc, xint / 2)
     }
   }
 
-  int_to_bits_reversed_acc(Vec::with_capacity(32), int)
+  let mut vec: Vec<bool> = Vec::with_capacity(32);
+
+  if int == 0 {
+    vec.push(false);
+    vec
+  } else {
+    int_to_bits_reversed_acc(vec, int)
+  }
 }
 
 #[cfg(test)]

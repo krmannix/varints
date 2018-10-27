@@ -1,11 +1,14 @@
 use std::char;
 
+/// Pass in a u32 and returns a Vec<char> of hexadecimal characters in big-endian format 
 pub fn to_hex(int: u32) -> Vec<char> {
   let bits_reversed = int_to_bits_reversed(int);
   let bytes = bits_reversed_to_bytes(&bits_reversed);
   return bytes_to_hex(&bytes);
 }
 
+/// Takes a two-dimension Vec, with each element representing a byte. Each byte is represented
+/// through a series of bools 
 fn bytes_to_hex(bytes: &Vec<Vec<bool>>) -> Vec<char> {
   return bytes.iter().flat_map(|bitv| {
     return bitv.chunks(4).map(|bits| {
@@ -14,6 +17,7 @@ fn bytes_to_hex(bytes: &Vec<Vec<bool>>) -> Vec<char> {
   }).collect();
 }
 
+/// Converts a 4-element Vec, representing a half-byte (or nibble), into a single hexadecimal char
 fn nibble_to_hex(nibble: Vec<bool>) -> char {
   let num = nibble.iter().enumerate().fold(0, |acc, (i, &bit)| {
     acc + if bit { 2u8.pow((nibble.len() - i - 1) as u32) } else { 0 }
@@ -26,6 +30,11 @@ fn nibble_to_hex(nibble: Vec<bool>) -> char {
   }
 }
 
+/// Takes a Vec of bools representing bits of the integer, and returns a 2-d Vec with each element
+/// representing a varint byte in reverse order, with the internal bits in reverse order.
+///
+/// Simply put, it's the varint representation in reverse bit order, broken up into byte-sized
+/// elements
 fn bits_reversed_to_bytes(bits_reversed: &Vec<bool>) -> Vec<Vec<bool>> {
   let last_chunk_index = bits_reversed.len() / 7;
 
@@ -40,7 +49,7 @@ fn bits_reversed_to_bytes(bits_reversed: &Vec<bool>) -> Vec<Vec<bool>> {
   }).collect();
 }
 
-
+/// Takes a u32 and computes the binary representation, return the bits in reverse order
 fn int_to_bits_reversed(int: u32) -> Vec<bool> {
   fn int_to_bits_reversed_acc(mut acc: Vec<bool>, xint: u32) -> Vec<bool> {
     if xint == 0 {
